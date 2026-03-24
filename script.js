@@ -1,21 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // アニメーション対象の要素を取得
-  const reveals = document.querySelectorAll('.research-card, .member-card, .pub-list li, .glass-card');
-  reveals.forEach(el => el.classList.add('reveal'));
+  // 業績リストのアイテムに時間差（スタッガー）のディレイを設定
+  const pubItems = document.querySelectorAll('.pub-list li');
+  pubItems.forEach((el, index) => {
+    // 最初の数個以降は画面外にあるため、インデックスを少し調整して遅延が大きくなりすぎないようにする工夫も可能ですが、
+    // シンプルに順番に0.1秒ずつ遅延を加えます。（最大値は少し抑える）
+    const delay = Math.min(index * 0.1, 1.5); 
+    el.style.transitionDelay = `${delay}s`;
+    el.classList.add('reveal');
+  });
 
-  const revealOnScroll = () => {
-    const windowHeight = window.innerHeight;
-    const elementVisible = 100;
+  // 他のカード要素もアニメーション対象に設定
+  const cards = document.querySelectorAll('.research-card, .member-card, .glass-card');
+  cards.forEach(el => el.classList.add('reveal'));
 
-    reveals.forEach(el => {
-      const elementTop = el.getBoundingClientRect().top;
-      if (elementTop < windowHeight - elementVisible) {
-        el.classList.add('active');
+  const reveals = document.querySelectorAll('.reveal');
+
+  // IntersectionObserverによるモダンなスクロール検知
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        // 一度表示されたらアニメーションを繰り返さない場合は監視を解除
+        // observer.unobserve(entry.target);
       }
     });
-  };
+  }, {
+    threshold: 0.1, // 10%表示されたら発火
+    rootMargin: "0px 0px -50px 0px" // 画面下部から50px手前で発火
+  });
 
-  // スクロールイベントと初期表示時に実行
-  window.addEventListener('scroll', revealOnScroll);
-  setTimeout(revealOnScroll, 100); 
+  // 全ての.reveal要素を監視対象に追加
+  reveals.forEach(el => {
+    observer.observe(el);
+  });
 });

@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
 :root {
   --primary: #1a2e4a;
@@ -207,10 +207,26 @@ section { padding: 100px 24px; position: relative; z-index: 20; }
 
 .pub-list { list-style: none; }
 .pub-list li {
-  padding: 24px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
-  font-size: 1rem; color: var(--text-muted); line-height: 1.6; transition: color 0.3s;
+  padding: 24px 20px; border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 1rem; color: var(--text-muted); line-height: 1.6; 
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 8px; margin-bottom: 4px;
+  position: relative;
 }
-.pub-list li:hover { color: var(--text-main); }
+.pub-list li:hover { 
+  color: var(--text-main); 
+  background: rgba(255, 255, 255, 0.6); 
+  transform: translateX(10px); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+}
+.pub-list li::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--accent); border-radius: 3px; transform: scaleY(0);
+  transition: transform 0.4s ease; transform-origin: center;
+}
+.pub-list li:hover::before {
+  transform: scaleY(0.7);
+}
 .pub-year {
   background: rgba(0, 112, 243, 0.1); color: var(--accent); border: 1px solid rgba(0,112,243,0.2);
   padding: 4px 10px; border-radius: 6px; font-weight: 700; margin-right: 12px; font-size: 0.85rem;
